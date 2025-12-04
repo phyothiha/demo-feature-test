@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -25,7 +27,6 @@ class ArticleController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            // 'published' => 'boolean',
         ]);
 
         $validated['user_id'] = auth()->id();
@@ -37,26 +38,28 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        return view('article.show', $article);
+        return view('article.show', compact('article'));
     }
 
     public function edit(Article $article)
     {
-        return view('admin.article.edit', $article);
+        Gate::authorize('update', $article);
+
+        return view('admin.article.edit', compact('article'));
     }
 
     public function update(Request $request, Article $article)
     {
-        $this->authorize('update', $article);
+        Gate::authorize('update', $article);
 
         $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'content' => 'sometimes|required|string',
-            'published' => 'boolean',
+            'title' => 'required|string|max:255',
+            'slug' => 'required|unique:articles',
+            'content' => 'required|string',
         ]);
 
-        if (isset($validated['title'])) {
-            $validated['slug'] = Str::slug($validated['title']);
+        if (isset($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['slug']);
         }
 
         $article->update($validated);
@@ -66,10 +69,10 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        $this->authorize('delete', $article);
+        Gate::authorize('delete', $article);
 
         $article->delete();
 
-        return response()->json(null, 204);
+        return redirect()->route('dashboard.articles.index');
     }
 }

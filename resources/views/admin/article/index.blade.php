@@ -36,19 +36,21 @@
                             {{ $article->id }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $article->title }}
+                            <a href="{{ route('articles.show', $article->slug) }}" class="font-medium text-blue-500 hover:underline">
+                                {{ $article->title }}
+                            </a>
                         </td>
                         <td class="px-6 py-4">
                             {{ $article->created_at->diffForHumans() }}
                         </td>
                         <td class="px-6 py-4 flex gap-2">
-                            <a href="{{ route('articles.show', $article->slug) }}" class="font-medium text-blue-500 hover:underline">
-                                Show
-                            </a>
                             <a href="{{ route('dashboard.articles.edit', $article->id) }}" class="font-medium text-yellow-500 hover:underline">
                                 Edit
                             </a>
-                            <form action="{{ route('dashboard.articles.destroy', $article->id) }}">
+                            <form action="{{ route('dashboard.articles.destroy', $article->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+
                                 <button type="submit" class="text-red-500">Delete</button>
                             </form>
                         </td>
