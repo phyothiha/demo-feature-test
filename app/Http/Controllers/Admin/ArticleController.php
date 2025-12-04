@@ -33,7 +33,7 @@ class ArticleController extends Controller
 
         $article = Article::create($validated);
 
-        return redirect()->route('dashboard.articles.index');
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article created successfully.');
     }
 
     public function show(Article $article)
@@ -64,7 +64,7 @@ class ArticleController extends Controller
 
         $article->update($validated);
 
-        return response()->json($article);
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article updated successfully.');
     }
 
     public function destroy(Article $article)
@@ -73,6 +73,6 @@ class ArticleController extends Controller
 
         $article->delete();
 
-        return redirect()->route('dashboard.articles.index');
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article deleted successfully.');
     }
 }
