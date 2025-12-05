@@ -20,12 +20,16 @@ class ArticleFactory extends Factory
     {
         $title = fake()->sentence();
 
+        $isPublished = fake()->boolean();
+
         return [
             'title' => $title,
             'content' => fake()->paragraphs(6, true),
             'slug' => Str::slug($title),
             // 'published' => fake()->boolean(),
             'user_id' => User::factory(),
+            'created_at' => fake()->dateTimeThisYear(),
+            'deleted_at' => $isPublished ? null : fake()->dateTimeThisYear(),
         ];
     }
 

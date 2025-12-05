@@ -12,7 +12,11 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = auth()->user()->articles()->latest()->paginate();
+        $articles = auth()->user()
+            ->articles()
+            ->withTrashed()
+            ->latest()
+            ->paginate();
 
         return view('admin.article.index', compact('articles'));
     }

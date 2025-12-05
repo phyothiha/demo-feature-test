@@ -11,15 +11,18 @@
         </div>
     </x-slot>
 
-    <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-lg border border-default border-b-0 mb-4">
+    <div class="relative overflow-x-auto bg-slate-primary-soft shadow-xs rounded-lg border border-default border-b-0 mb-4">
         <table class="w-full text-sm text-left rtl:text-right text-body">
-            <thead class="bg-neutral-secondary-soft border-b border-default">
+            <thead class="bg-slate-secondary-soft border-b border-default">
                 <tr>
                     <th scope="col" class="px-6 py-3 font-medium">
                         ID
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium">
                         Title
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-medium">
+                        Status
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium">
                         Published At
@@ -31,7 +34,7 @@
             </thead>
             <tbody>
                 @foreach ($articles as $article)
-                    <tr class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
+                    <tr class="odd:bg-slate-primary even:bg-slate-secondary-soft border-b border-default">
                         <th scope="row" class="px-6 py-4 font-medium text-heading whitespace-nowrap">
                             {{ $article->id }}
                         </th>
@@ -41,17 +44,23 @@
                             </a>
                         </td>
                         <td class="px-6 py-4">
+                            @if ($article->deleted_at)
+                                <span class="bg-slate-200 text-heading text-xs font-medium px-1.5 py-0.5 rounded-lg text-slate-800">Inactive</span>
+                            @else
+                                <span class="bg-green-200 text-green-800 text-xs font-medium px-1.5 py-0.5 rounded-lg">Active</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4">
                             {{ $article->created_at->diffForHumans() }}
                         </td>
                         <td class="px-6 py-4 flex gap-2">
-                            <a href="{{ route('dashboard.articles.edit', $article->id) }}" class="font-medium text-yellow-500 hover:underline">
+                            <a href="{{ route('dashboard.articles.edit', $article->id) }}" class="text-white bg-indigo-500 box-border border border-transparent hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none w-[80px] text-center">
                                 Edit
                             </a>
                             <form action="{{ route('dashboard.articles.destroy', $article->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-
-                                <button type="submit" class="text-red-500">Delete</button>
+                                <button type="submit" class="text-white bg-red-500 box-border border border-transparent hover:bg-red-700 focus:ring-4 focus:ring-red-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none w-[80px] text-center">Delete</button>
                             </form>
                         </td>
                     </tr>
