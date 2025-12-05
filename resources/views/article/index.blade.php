@@ -1,7 +1,7 @@
 <x-site-layout>
 
     <div class="space-y-6">
-        @foreach ($articles as $article)
+        @forelse ($articles as $article)
             <div>
                 <h2 class="text-3xl font-semibold mb-2">
                     {{ $article->title }}
@@ -33,7 +33,10 @@
                     Read More #{{ $article->id }}
                 </a>
             </div>
-        @endforeach
+
+        @empty
+            <p>No articles are written yet.</p>
+        @endforelse
 
         {{ $articles->links() }}
     </div>

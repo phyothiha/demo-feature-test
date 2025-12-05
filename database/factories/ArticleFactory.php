@@ -26,7 +26,6 @@ class ArticleFactory extends Factory
             'title' => $title,
             'content' => fake()->paragraphs(6, true),
             'slug' => Str::slug($title),
-            // 'published' => fake()->boolean(),
             'user_id' => User::factory(),
             'created_at' => fake()->dateTimeThisYear(),
             'deleted_at' => $isPublished ? null : fake()->dateTimeThisYear(),
@@ -37,16 +36,16 @@ class ArticleFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'published' => true,
+                'deleted_at' => null,
             ];
         });
     }
 
-    public function draft()
+    public function unpublished()
     {
         return $this->state(function (array $attributes) {
             return [
-                'published' => false,
+                'deleted_at' => now(),
             ];
         });
     }
