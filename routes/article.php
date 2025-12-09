@@ -11,5 +11,14 @@ Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])
     ->name('articles.show');
 
 Route::middleware('auth')->name('dashboard.')->prefix('/dashboard')->group(function () {
-    Route::resource('articles', AdminArticleController::class);
+    Route::put('/articles/{article}/restore', [AdminArticleController::class, 'restore'])
+        ->name('articles.restore')
+        ->withTrashed();
+
+    Route::put('/articles/{article}/delete', [AdminArticleController::class, 'delete'])
+        ->name('articles.delete')
+        ->withTrashed();
+
+    Route::resource('articles', AdminArticleController::class)
+        ->withTrashed();
 });

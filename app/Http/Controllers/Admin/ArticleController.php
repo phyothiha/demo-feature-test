@@ -71,12 +71,31 @@ class ArticleController extends Controller
         return redirect()->route('dashboard.articles.index')->with('success', 'Article updated successfully.');
     }
 
+    // Force Delete
     public function destroy(Article $article)
     {
         Gate::authorize('delete', $article);
 
+        $article->forceDelete();
+
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article permanently deleted successfully.');
+    }
+
+    public function restore(Article $article)
+    {
+        Gate::authorize('update', $article);
+
+        $article->restore();
+
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article re-published successfully.');
+    }
+
+    public function delete(Article $article)
+    {
+        Gate::authorize('update', $article);
+
         $article->delete();
 
-        return redirect()->route('dashboard.articles.index')->with('success', 'Article deleted successfully.');
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article un-published successfully.');
     }
 }

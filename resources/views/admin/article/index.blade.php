@@ -54,13 +54,34 @@
                             {{ $article->created_at->diffForHumans() }}
                         </td>
                         <td class="px-6 py-4 flex gap-2">
-                            <a href="{{ route('dashboard.articles.edit', $article->id) }}" class="text-white bg-indigo-500 box-border border border-transparent hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none w-[80px] text-center">
+                            <a href="{{ route('dashboard.articles.edit', $article->id) }}" class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 focus:ring-blue-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none">
                                 Edit
                             </a>
+
+                            @if ($article->deleted_at)
+                                <form action="{{ route('dashboard.articles.restore', $article->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="text-white bg-indigo-500 box-border border border-transparent hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none">
+                                       Re-Publish
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('dashboard.articles.delete', $article->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="text-white bg-slate-500 box-border border border-transparent hover:bg-slate-700 focus:ring-4 focus:ring-slate-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none">
+                                        Unpublish
+                                    </button>
+                                </form>
+                            @endif
+
                             <form action="{{ route('dashboard.articles.destroy', $article->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-white bg-red-500 box-border border border-transparent hover:bg-red-700 focus:ring-4 focus:ring-red-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none w-[80px] text-center">Delete</button>
+                                <button type="submit" class="text-white bg-red-500 box-border border border-transparent hover:bg-red-700 focus:ring-4 focus:ring-red-600 shadow-xs font-medium leading-5 rounded-lg text-sm px-2 py-1.5 focus:outline-none">
+                                    Delete
+                                </button>
                             </form>
                         </td>
                     </tr>

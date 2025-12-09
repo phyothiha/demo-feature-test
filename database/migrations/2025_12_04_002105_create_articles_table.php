@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('content');
             $table->string('slug')->unique();
             $table->foreignId('user_id')->constrained();
-            $table->softDeletes();
+            $table->softDeletes(); // published unpublished
             $table->timestamps();
         });
     }
