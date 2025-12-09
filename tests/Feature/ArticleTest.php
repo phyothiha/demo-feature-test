@@ -223,7 +223,7 @@ describe('auth', function () {
 
     it('cannot update other user article', function () {
         $user = User::factory()->create();
-        $otherArticle = Article::factory()->create();
+        $otherArticle = Article::factory()->published()->create();
 
         actingAs($user)
             ->put(route('dashboard.articles.update', $otherArticle), [
@@ -260,7 +260,7 @@ describe('auth', function () {
 
     it('cannot delete other user article', function () {
         $user = User::factory()->create();
-        $otherArticle = Article::factory()->create();
+        $otherArticle = Article::factory()->published()->create();
 
         actingAs($user)
             ->delete(route('dashboard.articles.destroy', $otherArticle))
